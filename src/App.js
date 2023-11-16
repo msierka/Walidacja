@@ -6,6 +6,7 @@ class App extends Component {
     email: '',
     password: '',
     check: false,
+    mess: '',
     error : {
       name_error : false,
       email_error : false,
@@ -32,6 +33,7 @@ handleSubmit=e=>{
     email: '',
     password: '',
     check: false,
+    mess: 'Forlumarz wysłany',
     error : {
       name_error : false,
       email_error : false,
@@ -52,6 +54,14 @@ handleSubmit=e=>{
       }})
   }
   
+}
+
+componentDidUpdate(){
+  if(this.state.mess !== ''){
+  setTimeout(()=>this.setState({
+    mess: ''
+  }),5000)
+}
 }
 
 formValidation=()=>{
@@ -125,7 +135,7 @@ handleChange=e=>{
          </label> 
          {this.state.error.check_error && <span>{check_error}</span>}
          <button>Zapisz się</button>
-         
+         {this.state.mess && <h3>{this.state.mess}</h3>}
       </form>
     );
   }
