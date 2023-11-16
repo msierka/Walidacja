@@ -7,10 +7,10 @@ class App extends Component {
     password: '',
     check: false,
     error : {
-      name_error : true,
-      email_error : true,
-      password_error: true,
-      check_error: true,
+      name_error : false,
+      email_error : false,
+      password_error: false,
+      check_error: false,
     }
    } 
 
@@ -24,7 +24,67 @@ class App extends Component {
 
 handleSubmit=e=>{
   e.preventDefault();
+  const validation = this.formValidation();
+  if(validation.correct){
+    console.log("formularz wysłany")
+    this.setState({
+    name: '',
+    email: '',
+    password: '',
+    check: false,
+    error : {
+      name_error : false,
+      email_error : false,
+      password_error: false,
+      check_error: false,
+    }})
+  } else {
+    this.setState({
+      name: '',
+      email: '',
+      password: '',
+      check: false,
+      error : {
+        name_error : !validation.name_error,
+        email_error : !validation.email_error,
+        password_error: !validation.password_error,
+        check_error: !validation.check_error,
+      }})
+  }
+  
 }
+
+formValidation=()=>{
+  let name_error = false;
+  let email_error = false;
+  let password_error = false;
+  let check_error = false;
+  let correct = false;
+
+  if(this.state.name.length > 6 && this.state.name.indexOf(' ') === -1) {
+    name_error = true;
+  }
+  if(this.state.email.indexOf('@') !== -1) {
+    email_error = true;
+  }
+  if(this.state.password.length === 6 ) {
+    password_error = true;
+  }
+  if(this.state.check) {
+    check_error = true;
+  }
+  if(name_error && email_error && password_error && check_error ){
+    correct = true;
+  }
+  return {
+    name_error,
+    email_error,
+    password_error,
+    check_error,
+    correct
+  }
+}
+
 
 handleChange=e=>{
   const type=e.target.type;
@@ -47,7 +107,7 @@ handleChange=e=>{
   render() { 
     const {name_error, email_error, password_error, check_error} = this.mess;
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} noValidate>
         <label htmlFor="text"> Twój login
           <input type="text" id="text" name="name" value={this.state.name} onChange={this.handleChange}/>
         {this.state.error.name_error && <span>{name_error}</span>}
